@@ -13,12 +13,23 @@ export function useHttp() {
     withCredentials: true,
   })
   function register(data:registerRes) {
-    return http.request<IRes<Account>>({
+    return http.request<IRes<string>>({
       url: account.REIGITURL,
-      data
+      data,
+      method:"post"
+    })
+  }
+  function validateEmail(code:string){
+    return http.request<IRes<string>>({
+      url: account.REIGITURL,
+      data:{
+        code
+      },
+      method:"post"
     })
   }
   return {
+    validateEmail,
     register,
   }
 }

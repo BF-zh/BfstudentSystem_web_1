@@ -2,10 +2,9 @@
 import { EditPen, Lock, Message, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
-import { post } from '@/net'
 import { useHttp } from '@/composables/useHttp';
 
-const {register} = useHttp()
+const { register,validateEmail } = useHttp()
 const form = reactive({
   username: '',
   password: '',
@@ -66,14 +65,13 @@ function onValidate(prop: any, isValid: any) {
 function handleToRegister() {
   formRef.value.validate((isValid: any) => {
     if (isValid) {
-      post('/api/auth/register', {
+      register({
         username: form.username,
-        password: form.password,
-        email: form.email,
         code: form.code,
-      }, (message: any) => {
+        email: form.email,
+        password: form.password
+      }).then(({ message }) => {
         ElMessage.success(message)
-        router.push('/')
       })
     }
     else {
@@ -82,18 +80,17 @@ function handleToRegister() {
   })
 }
 
-function validateEmail() {
+function handleValidateEmail() {
   coldTime.value = 60
-
-  post('/api/auth/valid-register-email', {
-    email: form.email,
-  }, (message: any) => {
-    ElMessage.success(message)
-    setInterval(() => coldTime.value--, 1000)
-  }, (message) => {
-    ElMessage.warning(message)
-    coldTime.value = 0
+  validateEmail(form.code).then(({ success,message }) => {
+    if(success){
+      ElMessage.success(message)
+    }else{
+      ElMessage.warning(message)
+      coldTime.value = 0
+    }
   })
+
 }
 </script>
 
@@ -112,28 +109,36 @@ function validateEmail() {
         <el-form-item prop="username">
           <el-input v-model="form.username" :maxlength="8" type="text" placeholder="用户名">
             <template #prefix>
-              <el-icon><User /></el-icon>
+              <el-icon>
+                <User />
+              </el-icon>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input v-model="form.password" :maxlength="16" type="password" placeholder="密码">
             <template #prefix>
-              <el-icon><Lock /></el-icon>
+              <el-icon>
+                <Lock />
+              </el-icon>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item prop="password_repeat">
           <el-input v-model="form.password_repeat" :maxlength="16" type="password" placeholder="重复密码">
             <template #prefix>
-              <el-icon><Lock /></el-icon>
+              <el-icon>
+                <Lock />
+              </el-icon>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item prop="email">
           <el-input v-model="form.email" type="email" placeholder="电子邮件地址">
             <template #prefix>
-              <el-icon><Message /></el-icon>
+              <el-icon>
+                <Message />
+              </el-icon>
             </template>
           </el-input>
         </el-form-item>
@@ -142,15 +147,14 @@ function validateEmail() {
             <el-col :span="17">
               <el-input v-model="form.code" :maxlength="6" type="text" placeholder="请输入验证码">
                 <template #prefix>
-                  <el-icon><EditPen /></el-icon>
+                  <el-icon>
+                    <EditPen />
+                  </el-icon>
                 </template>
               </el-input>
             </el-col>
             <el-col :span="5">
-              <el-button
-                type="success" :disabled="!isEmailValid || coldTime > 0"
-                @click="validateEmail"
-              >
+              <el-button type="success" :disabled="!isEmailValid || coldTime > 0" @click="handleValidateEmail">
                 {{ coldTime > 0 ? `请稍后 ${coldTime} 秒` : '获取验证码' }}
               </el-button>
             </el-col>
@@ -169,9 +173,7 @@ function validateEmail() {
         立即登录
       </el-link>
     </div>
-  </div>
-</template>
+  </div></template>
 
 <style scoped>
-
 </style>

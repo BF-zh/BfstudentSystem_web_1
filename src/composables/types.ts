@@ -6,4 +6,4 @@ import type { Account } from "@/types"
   message: T
 }
 
-export type registerRes = Pick<Account,'username'|'password'|'email'>&{code:number}
+export type registerRes = Pick<Account,'username'|'password'|'email'>&{code:string}
