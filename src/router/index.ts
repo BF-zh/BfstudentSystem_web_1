@@ -1,31 +1,32 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useStore } from '@/stores'
+import { RouterName } from './const'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'welcome',
+      name: RouterName.WECOME,
       component: () => import('@/views/WelcomeView.vue'),
       children: [
         {
           path: '',
-          name: 'welcome-login',
+          name: RouterName.LOGIN,
           component: () => import('@/components/welcome/LoginPage.vue'),
         }, {
           path: 'register',
-          name: 'welcome-register',
+          name: RouterName.REGISTER,
           component: () => import('@/components/welcome/RegisterPage.vue'),
         }, {
           path: 'forget',
-          name: 'welcome-forget',
+          name: RouterName.FORGET_PASSWORD,
           component: () => import('@/components/welcome/ForgetPage.vue'),
         },
       ],
     }, {
       path: '/index',
-      name: 'index',
+      name: RouterName.HOME,
       component: () => import('@/views/IndexView.vue'),
     },
   ],

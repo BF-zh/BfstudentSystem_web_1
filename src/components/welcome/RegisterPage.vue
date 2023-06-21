@@ -3,7 +3,9 @@ import { EditPen, Lock, Message, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
 import { post } from '@/net'
+import { useHttp } from '@/composables/useHttp';
 
+const {register} = useHttp()
 const form = reactive({
   username: '',
   password: '',
@@ -61,7 +63,7 @@ function onValidate(prop: any, isValid: any) {
     isEmailValid.value = isValid
 }
 
-function register() {
+function handleToRegister() {
   formRef.value.validate((isValid: any) => {
     if (isValid) {
       post('/api/auth/register', {
@@ -82,6 +84,7 @@ function register() {
 
 function validateEmail() {
   coldTime.value = 60
+
   post('/api/auth/valid-register-email', {
     email: form.email,
   }, (message: any) => {
@@ -156,7 +159,7 @@ function validateEmail() {
       </el-form>
     </div>
     <div style="margin-top: 80px">
-      <el-button style="width: 270px" type="warning" plain @click="register">
+      <el-button style="width: 270px" type="warning" plain @click="handleToRegister">
         立即注册
       </el-button>
     </div>

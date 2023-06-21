@@ -7,7 +7,6 @@ import type { IRes, registerRes } from './types'
 export function useHttp() {
   const http = new Request({
     baseURL: 'http://localhost:8080',
-    // @ts-ignore
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },

@@ -28,7 +28,13 @@ export default defineConfig({
       dts: 'types/components.d.ts',
     }),
     AutoImport({
+      include: [
+        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+        /\.vue$/, /\.vue\?vue/, // .vue
+        /\.md$/, // .md
+      ],
       imports: ['vue', 'pinia', 'vue-router', '@vueuse/core'],
+      dirs:['src/composables/**'],
       dts: 'types/auto-imports.d.ts',
     }),
   ],
