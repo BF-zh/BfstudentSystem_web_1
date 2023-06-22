@@ -2,7 +2,12 @@ import type { RawAxiosRequestHeaders } from 'axios'
 import { Request } from '@/tools'
 import { account } from '@/apis/account'
 import type { Account } from '@/types'
-import type { IRes, registerRes } from './types'
+export interface IRes<T> {
+  status: number,
+  success: boolean,
+  message: T
+}
+
 
 export function useHttp() {
   const http = new Request({
@@ -12,7 +17,7 @@ export function useHttp() {
     },
     withCredentials: true,
   })
-  function register(data:registerRes) {
+  function register(data:Pick<Account,'username'|'password'|'email'>&{code:string}) {
     return http.request<IRes<string>>({
       url: account.REIGITURL,
       data,
