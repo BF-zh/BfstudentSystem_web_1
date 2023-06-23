@@ -2,9 +2,9 @@
 import { EditPen, Lock, Message, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
-import { useHttp } from '@/composables/useHttp';
+import { useHttp } from '@/composables/useHttp'
 
-const { register,validateEmail } = useHttp()
+const { register, validateEmail } = useHttp()
 const form = reactive({
   username: '',
   password: '',
@@ -69,7 +69,7 @@ function handleToRegister() {
         username: form.username,
         code: form.code,
         email: form.email,
-        password: form.password
+        password: form.password,
       }).then(({ message }) => {
         ElMessage.success(message)
       })
@@ -82,15 +82,15 @@ function handleToRegister() {
 
 function handleValidateEmail() {
   coldTime.value = 60
-  validateEmail(form.code).then(({ success,message }) => {
-    if(success){
+  validateEmail(form.code).then(({ success, message }) => {
+    if (success) {
       ElMessage.success(message)
-    }else{
+    }
+    else {
       ElMessage.warning(message)
       coldTime.value = 0
     }
   })
-
 }
 </script>
 
@@ -173,7 +173,8 @@ function handleValidateEmail() {
         立即登录
       </el-link>
     </div>
-  </div></template>
+  </div>
+</template>
 
 <style scoped>
 </style>

@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { Lock, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { get, post } from '@/net'
 import router from '@/router'
 import { useStore } from '@/stores'
+import { useHttp } from '@/composables/useHttp'
+import { useGoTo } from '@/composables/useGoTo'
 
+const { login, userInfo } = useHttp()
+const { goToHome } = useGoTo()
 const store = useStore()
 
 const form = reactive({
@@ -13,22 +16,23 @@ const form = reactive({
   remember: false,
 })
 
-function login() {
+function handleLogin() {
   if (!form.username || !form.password) {
     ElMessage.warning('请填写用户名和密码！')
   }
   else {
-    post('/api/auth/login', {
-      username: form.username,
+    login({
       password: form.password,
+      username: form.username,
       remember: form.remember,
-    }, (message: any) => {
+    }).then(({ message }) => {
       ElMessage.success(message)
-      get('/api/user/me', (message: any) => {
+      userInfo().then(({ message, success }) => {
+        if (!success)
+          store.auth.user = null
+
         store.auth.user = message
-        router.push('/index')
-      }, () => {
-        store.auth.user = null
+        goToHome()
       })
     })
   }
@@ -68,7 +72,7 @@ function login() {
       </el-col>
     </el-row>
     <div style="margin-top: 40px">
-      <el-button style="width: 270px" type="success" plain @click="login()">
+      <el-button style="width: 270px" type="success" plain @click="handleLogin()">
         立即登录
       </el-button>
     </div>

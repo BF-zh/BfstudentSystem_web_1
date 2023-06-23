@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
 import { EditPen, Lock, Message } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { post } from '@/net'
-import router from '@/router'
+import { useHttp } from '@/composables/useHttp'
+import { useGoTo } from '@/composables/useGoTo'
 
+const { validateResetEmail, startReset, doReset } = useHttp()
+const { goToWeCome } = useGoTo()
 const active = ref(0)
 
 const form = reactive({
@@ -51,25 +52,23 @@ function onValidate(prop: any, isValid: any) {
 
 function validateEmail() {
   coldTime.value = 60
-  post('/api/auth/valid-reset-email', {
-    email: form.email,
-  }, (message: any) => {
+  validateResetEmail({ email: form.email }).then(({ message }) => {
     ElMessage.success(message)
     setInterval(() => coldTime.value--, 1000)
-  }, (message) => {
+  }).catch(({ message }) => {
     ElMessage.warning(message)
     coldTime.value = 0
   })
 }
 
-function startReset() {
+function handleStartReset() {
   formRef.value.validate((isValid: any) => {
     if (isValid) {
-      post('/api/auth/start-reset', {
+      startReset({
         email: form.email,
         code: form.code,
-      }, () => {
-        active.value++
+      }).then(({ message }) => {
+        ElMessage.success(message)
       })
     }
     else {
@@ -78,14 +77,12 @@ function startReset() {
   })
 }
 
-function doReset() {
+function handleDoReset() {
   formRef.value.validate((isValid: any) => {
     if (isValid) {
-      post('/api/auth/do-reset', {
-        password: form.password,
-      }, (message: any) => {
+      doReset({ password: form.password }).then(({ message }) => {
         ElMessage.success(message)
-        router.push('/')
+        goToWeCome()
       })
     }
     else {
@@ -144,7 +141,7 @@ function doReset() {
           </el-form>
         </div>
         <div style="margin-top: 70px">
-          <el-button style="width: 270px;" type="danger" plain @click="startReset()">
+          <el-button style="width: 270px;" type="danger" plain @click="handleStartReset()">
             开始重置密码
           </el-button>
         </div>
@@ -179,7 +176,7 @@ function doReset() {
           </el-form>
         </div>
         <div style="margin-top: 70px">
-          <el-button style="width: 270px;" type="danger" plain @click="doReset()">
+          <el-button style="width: 270px;" type="danger" plain @click="handleDoReset()">
             立即重置密码
           </el-button>
         </div>

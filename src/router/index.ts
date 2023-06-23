@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useStore } from '@/stores'
 import { RouterName } from './const'
+import { useStore } from '@/stores'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,9 +9,10 @@ const router = createRouter({
       path: '/',
       name: RouterName.WECOME,
       component: () => import('@/views/WelcomeView.vue'),
+      redirect: { name: RouterName.LOGIN },
       children: [
         {
-          path: '',
+          path: '/login',
           name: RouterName.LOGIN,
           component: () => import('@/components/welcome/LoginPage.vue'),
         }, {
@@ -35,6 +36,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const store = useStore()
   if (store.auth.user != null && to.name?.toString().startsWith('welcome-'))
+
     next('/index')
 
   else if (store.auth.user == null && to.fullPath.startsWith('/index'))

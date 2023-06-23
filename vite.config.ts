@@ -11,6 +11,7 @@ import Components from 'unplugin-vue-components/vite'
 
 // 自动导入组件的预设
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import ElementPlus from 'unplugin-element-plus/vite'
 
 // 自动导入vue3的hooks
 import AutoImport from 'unplugin-auto-import/vite'
@@ -34,9 +35,10 @@ export default defineConfig({
         /\.md$/, // .md
       ],
       imports: ['vue', 'pinia', 'vue-router', '@vueuse/core'],
-      dirs:['src/composables/**'],
+      dirs: ['src/composables/**'],
       dts: 'types/auto-imports.d.ts',
     }),
+    ElementPlus(),
   ],
   resolve: {
     alias: {
