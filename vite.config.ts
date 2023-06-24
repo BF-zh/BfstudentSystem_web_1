@@ -12,6 +12,8 @@ import Components from 'unplugin-vue-components/vite'
 // 自动导入组件的预设
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import ElementPlus from 'unplugin-element-plus/vite'
+import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
 
 // 自动导入vue3的hooks
 import AutoImport from 'unplugin-auto-import/vite'
@@ -25,8 +27,12 @@ export default defineConfig({
       dirs: ['src/components'],
       deep: true,
       extensions: ['vue'],
-      resolvers: [ElementPlusResolver()],
-      dts: 'types/components.d.ts',
+      resolvers: [
+        ElementPlusResolver(),
+        IconsResolver({
+          enabledCollections: ['ep'],
+        })],
+      dts: 'src/types/components.d.ts',
     }),
     AutoImport({
       include: [
@@ -36,9 +42,21 @@ export default defineConfig({
       ],
       imports: ['vue', 'pinia', 'vue-router', '@vueuse/core'],
       dirs: ['src/composables/**'],
-      dts: 'types/auto-imports.d.ts',
+      dts: 'src/types/auto-imports.d.ts',
+      resolvers: [
+        ElementPlusResolver(),
+        // Auto import icon components
+        // 自动导入图标组件
+        IconsResolver({
+          prefix: 'Icon',
+        }),
+      ],
+
     }),
     ElementPlus(),
+    Icons({
+      autoInstall: true,
+    }),
   ],
   resolve: {
     alias: {

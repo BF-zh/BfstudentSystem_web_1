@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { useHttp } from './composables/useHttp'
-import { useGoTo } from './composables/useGoTo'
+import locale from 'element-plus/dist/locale/zh-cn.mjs'
 import { useStore } from '@/stores'
 
 const { userInfo } = useHttp()
@@ -19,9 +18,13 @@ if (store.auth.user == null) {
 </script>
 
 <template>
-  <router-view />
+  <el-config-provider :locale="locale">
+    <router-view />
+  </el-config-provider>
 </template>
 
 <style>
-
+body{
+  background: #f3f1f1;
+}
 </style>

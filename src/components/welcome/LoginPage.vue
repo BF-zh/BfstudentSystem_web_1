@@ -3,8 +3,6 @@ import { Lock, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
 import { useStore } from '@/stores'
-import { useHttp } from '@/composables/useHttp'
-import { useGoTo } from '@/composables/useGoTo'
 
 const { login, userInfo } = useHttp()
 const { goToHome } = useGoTo()
@@ -28,11 +26,13 @@ function handleLogin() {
     }).then(({ message }) => {
       ElMessage.success(message)
       userInfo().then(({ message, success }) => {
-        if (!success)
+        if (!success) {
           store.auth.user = null
-
-        store.auth.user = message
-        goToHome()
+        }
+        else {
+          store.auth.user = message
+          goToHome()
+        }
       })
     })
   }

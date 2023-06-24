@@ -5,5 +5,6 @@ export interface Account{
   email:string,
   type:number,
   birthday:string,
+  nickname:string,
   sex:int
 }

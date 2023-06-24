@@ -18,5 +18,7 @@ export default defineConfig({
   rules: [
     [/^(?:line|l)-(?:h|height)-(.+)$/, ([,height]) => ({ 'line-height': `${height}` })],
     [/^(?:line|l)-(?:h|height)-(\d+)$/, ([,height]: any) => ({ 'line-height': `${height / 4}em` })],
+    ['p-md', { padding: '15px' }],
+    ['m-md', { margin: '15px' }],
   ],
 })

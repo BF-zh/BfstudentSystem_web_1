@@ -115,6 +115,20 @@ export function useHttp() {
       method: 'get',
     })
   }
+  function userList(params?: Partial<Account> | { keyword: string }) {
+    return http.request<IRes<Account[]>>({
+      url: USER.LIST,
+      method: 'get',
+      params,
+    })
+  }
+  function userUpdate(data?: Partial<Account>) {
+    return http.request<IRes<string>>({
+      url: USER.UPDATE,
+      method: 'post',
+      data,
+    })
+  }
   return {
     validateEmail,
     register,
@@ -124,5 +138,7 @@ export function useHttp() {
     startReset,
     doReset,
     logout,
+    userList,
+    userUpdate,
   }
 }

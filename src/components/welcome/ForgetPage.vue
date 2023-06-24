@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { EditPen, Lock, Message } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { useHttp } from '@/composables/useHttp'
-import { useGoTo } from '@/composables/useGoTo'
 
 const { validateResetEmail, startReset, doReset } = useHttp()
 const { goToWeCome } = useGoTo()

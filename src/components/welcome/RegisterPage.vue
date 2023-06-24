@@ -2,7 +2,6 @@
 import { EditPen, Lock, Message, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
-import { useHttp } from '@/composables/useHttp'
 
 const { register, validateEmail } = useHttp()
 const form = reactive({
