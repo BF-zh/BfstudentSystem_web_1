@@ -54,7 +54,7 @@ function handleLogout() {
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item>用户中心</el-dropdown-item>
-                <el-dropdown-item divided>
+                <el-dropdown-item divided @click="handleLogout">
                   退出登陆
                 </el-dropdown-item>
               </el-dropdown-menu>

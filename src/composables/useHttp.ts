@@ -115,8 +115,8 @@ export function useHttp() {
       method: 'get',
     })
   }
-  function userList(params?: Partial<Account> | { keyword: string }) {
-    return http.request<IRes<Account[]>>({
+  function userList(params?: Partial<Account> | { keyword?: string; limit: number; page: number }) {
+    return http.request<IRes<{ count: number; list: Account[] }>>({
       url: USER.LIST,
       method: 'get',
       params,
@@ -125,6 +125,20 @@ export function useHttp() {
   function userUpdate(data?: Partial<Account>) {
     return http.request<IRes<string>>({
       url: USER.UPDATE,
+      method: 'post',
+      data,
+    })
+  }
+  function userAdd(data: Partial<Account>) {
+    return http.request<IRes<string>>({
+      url: USER.ADD,
+      method: 'post',
+      data,
+    })
+  }
+  function userDelete(data: { ids: string }) {
+    return http.request<IRes<string>>({
+      url: USER.DELETE,
       method: 'post',
       data,
     })
@@ -140,5 +154,7 @@ export function useHttp() {
     logout,
     userList,
     userUpdate,
+    userAdd,
+    userDelete,
   }
 }

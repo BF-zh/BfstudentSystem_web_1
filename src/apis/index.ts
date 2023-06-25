@@ -11,4 +11,6 @@ export const USER = {
   INFO: '/api/user/me',
   LIST: '/api/user/list',
   UPDATE: '/api/user/update',
+  ADD: '/api/user/add',
+  DELETE: '/api/user/delete',
 }
